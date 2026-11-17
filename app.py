@@ -41,38 +41,203 @@ st.set_page_config(
 
 st.markdown("""
 <style>
+@import url('https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Manrope:wght@500;600;700;800&display=swap');
+
+:root {
+    --orbia-bg: #071426;
+    --orbia-panel: #10243A;
+    --orbia-panel-2: #142F49;
+    --orbia-cyan: #36C5F0;
+    --orbia-cyan-light: #A7EDFF;
+    --orbia-text: #F4F9FD;
+    --orbia-muted: #B9CAD8;
+}
 
 .stApp {
-    background: linear-gradient(135deg, #071426, #102B45);
-    color: #FFFFFF;
+    background:
+        radial-gradient(ellipse at 8% 3%, rgba(54,197,240,.16), transparent 30%),
+        radial-gradient(ellipse at 94% 17%, rgba(54,120,190,.17), transparent 28%),
+        linear-gradient(145deg, #061222 0%, #0A1B30 48%, #102B45 100%);
+    color: var(--orbia-text);
+    font-family: 'DM Sans', sans-serif;
+}
+.block-container {
+    max-width: 1180px;
+    padding-top: 2.2rem;
+    padding-bottom: 3rem;
+}
+h1, h2, h3, h4 {
+    font-family: 'Manrope', sans-serif !important;
+    color: var(--orbia-text) !important;
+    letter-spacing: -.025em;
+}
+p, label, li, .stMarkdown { color: #DCEAF5; }
+[data-testid="stCaptionContainer"] { color: var(--orbia-muted) !important; }
+
+/* Cabeçalho principal */
+.orbia-hero {
+    position: relative;
+    overflow: hidden;
+    padding: 2.35rem 2.5rem;
+    margin: .2rem 0 1.8rem 0;
+    border: 1px solid rgba(117,213,242,.30);
+    border-radius: 26px;
+    background:
+        radial-gradient(circle at 83% 24%, rgba(54,197,240,.23), transparent 23%),
+        linear-gradient(115deg, rgba(16,42,68,.98), rgba(7,24,43,.96));
+    box-shadow: 0 20px 55px rgba(0,0,0,.24), inset 0 1px 0 rgba(255,255,255,.06);
+}
+.orbia-hero:after {
+    content: "";
+    position: absolute;
+    width: 255px; height: 255px;
+    right: -68px; top: -118px;
+    border: 1px solid rgba(91,214,246,.25);
+    border-radius: 50%;
+    box-shadow: 0 0 0 22px rgba(91,214,246,.045), 0 0 0 48px rgba(91,214,246,.025);
+    pointer-events: none;
+}
+.orbia-kicker {
+    color: var(--orbia-cyan-light);
+    font-size: .74rem; font-weight: 700;
+    letter-spacing: .19em; text-transform: uppercase;
+    margin-bottom: .75rem;
+}
+.orbia-brand {
+    color: #fff; font-family: 'Manrope', sans-serif;
+    font-size: clamp(2.7rem, 7vw, 4.5rem);
+    font-weight: 800; line-height: 1;
+    letter-spacing: .045em; margin: 0;
+}
+.orbia-brand span { color: var(--orbia-cyan); }
+.orbia-subtitle {
+    color: #E2F0F8; font-size: 1.12rem;
+    margin-top: .75rem; margin-bottom: .7rem; font-weight: 600;
+}
+.orbia-description {
+    color: #B9CAD8; font-size: .96rem;
+    max-width: 720px; line-height: 1.7;
+}
+.orbia-chip-row { display:flex; gap:.55rem; flex-wrap:wrap; margin-top:1.25rem; }
+.orbia-chip {
+    border: 1px solid rgba(95,211,243,.30);
+    background: rgba(54,197,240,.09);
+    color: #C7F2FC; padding: .38rem .75rem;
+    border-radius: 999px; font-size: .76rem; font-weight: 600;
 }
 
-h1, h2, h3 {
-    color: #36C5F0 !important;
+/* Títulos e cartões de seção */
+.orbia-eyebrow {
+    color: var(--orbia-cyan); font-size: .72rem;
+    font-weight: 700; letter-spacing: .16em;
+    text-transform: uppercase; margin-bottom: .25rem;
+}
+.orbia-section-title {
+    font-family: 'Manrope', sans-serif; font-size: 1.45rem;
+    font-weight: 800; color: #F4FAFF; margin: 0 0 .35rem 0;
+}
+.orbia-section-copy { color: #B9CAD8; font-size: .92rem; margin-bottom: 1rem; }
+.orbia-info-card {
+    min-height: 118px; padding: 1.05rem 1.15rem;
+    border: 1px solid rgba(139,190,215,.18);
+    border-radius: 17px;
+    background: linear-gradient(145deg, rgba(20,48,74,.88), rgba(10,29,48,.92));
+    box-shadow: 0 10px 28px rgba(0,0,0,.12);
+}
+.orbia-info-icon { font-size: 1.25rem; margin-bottom: .5rem; }
+.orbia-info-title { color: #F1F8FC; font-weight: 700; margin-bottom: .25rem; }
+.orbia-info-copy { color: #B9CAD8; font-size: .82rem; line-height: 1.5; }
+
+/* Área de upload */
+[data-testid="stFileUploader"] section {
+    background: rgba(12,34,55,.72) !important;
+    border: 1px dashed rgba(83,202,237,.55) !important;
+    border-radius: 17px !important;
+}
+[data-testid="stFileUploader"] section * { color: #E7F5FC !important; }
+[data-testid="stFileUploader"] button {
+    background: #DDF6FF !important; color: #08263D !important;
+    border: 1px solid #8ADCF2 !important; font-weight: 700 !important;
 }
 
-p, label {
-    color: #DCEAF5;
+/* Cartões dos indicadores */
+div[data-testid="stMetric"] {
+    background: linear-gradient(145deg, rgba(20,48,74,.96), rgba(10,29,48,.96));
+    border: 1px solid rgba(116,195,224,.22);
+    border-radius: 17px;
+    padding: 1rem 1.1rem;
+    box-shadow: 0 10px 28px rgba(0,0,0,.14);
 }
-
-.stButton > button {
-    background-color: #087EA4;
-    color: white;
-    border: none;
-    border-radius: 10px;
-    padding: 12px 24px;
-    font-weight: bold;
+[data-testid="stMetricLabel"] p {
+    color: #C4D7E5 !important; font-weight: 600 !important;
 }
-
-.stButton > button:hover {
-    background-color: #36C5F0;
-    color: #071426;
-}
-
 [data-testid="stMetricValue"] {
-    color: #36C5F0;
+    color: #55D5F5 !important; font-family: 'Manrope', sans-serif !important;
+    font-weight: 800 !important;
+}
+[data-testid="stMetricDelta"] {
+    background: #DDF6FF !important;
+    color: #08263D !important;
+    border: 1px solid #8ADCF2 !important;
+    border-radius: 999px !important;
+    padding: .22rem .55rem !important;
+    display: inline-flex !important;
+    align-items: center !important;
+    width: fit-content !important;
+    font-weight: 800 !important;
+}
+[data-testid="stMetricDelta"] p,
+[data-testid="stMetricDelta"] span,
+[data-testid="stMetricDelta"] svg {
+    color: #08263D !important;
+    fill: #08263D !important;
 }
 
+/* Botões */
+.stButton > button {
+    background: linear-gradient(100deg, #087EA4, #16A7CC) !important;
+    color: #FFFFFF !important; border: 1px solid rgba(120,225,248,.38) !important;
+    border-radius: 11px !important; padding: .68rem 1.25rem !important;
+    font-weight: 800 !important; transition: all .18s ease-in-out;
+}
+.stButton > button:hover {
+    background: linear-gradient(100deg, #36C5F0, #8BE7FF) !important;
+    color: #071426 !important; transform: translateY(-1px);
+}
+.stButton > button p { color: inherit !important; }
+
+/* Alertas de sucesso */
+[data-testid="stAlert"][data-alert-type="success"] {
+    background: #DDF6FF !important; border: 1px solid #36C5F0 !important;
+    border-radius: 12px !important; color: #08263D !important;
+}
+[data-testid="stAlert"][data-alert-type="success"] p,
+[data-testid="stAlert"][data-alert-type="success"] div,
+[data-testid="stAlert"][data-alert-type="success"] span {
+    color: #08263D !important; font-weight: 700 !important;
+}
+
+/* Download PDF */
+[data-testid="stDownloadButton"] button {
+    background: linear-gradient(100deg, #36C5F0, #8BE7FF) !important;
+    color: #071426 !important; border: 1px solid #A7EDFF !important;
+    border-radius: 11px !important; font-weight: 800 !important;
+    min-height: 2.8rem;
+}
+[data-testid="stDownloadButton"] button p,
+[data-testid="stDownloadButton"] button span { color: #071426 !important; font-weight: 800 !important; }
+[data-testid="stDownloadButton"] button:hover { background: #C7F4FF !important; }
+[data-testid="stDownloadButton"] button:focus { outline: 2px solid #FFFFFF !important; outline-offset: 2px !important; }
+
+/* Área de análise e divisórias */
+[data-testid="stMarkdownContainer"] strong { color: #9BE8FA; }
+hr { border-color: rgba(125,190,218,.22) !important; }
+[data-testid="stSpinner"] p { color: #DDF6FF !important; font-weight: 600; }
+
+@media (max-width: 700px) {
+    .block-container { padding-left: 1rem; padding-right: 1rem; }
+    .orbia-hero { padding: 1.6rem 1.35rem; }
+}
 </style>
 """, unsafe_allow_html=True)
 
@@ -81,18 +246,51 @@ p, label {
 # CABEÇALHO
 # ==========================================
 
-st.title("🌌 ORBIA")
-
-st.subheader(
-    "Inteligência de Operações Comerciais"
-)
-
 st.markdown("""
-Transforme dados operacionais em informações estratégicas
-com análise inteligente e relatórios automatizados.
-""")
+<div class="orbia-hero">
+  <div class="orbia-kicker">Inteligência • Operações • Decisão</div>
+  <div class="orbia-brand">ORB<span>IA</span></div>
+  <div class="orbia-subtitle">Inteligência de Operações Comerciais</div>
+  <div class="orbia-description">
+    Transforme dados operacionais em clareza para agir.
+    A ORBIA organiza indicadores, identifica pontos de atenção
+    e apoia decisões com análises inteligentes e relatórios automatizados.
+  </div>
+  <div class="orbia-chip-row">
+    <span class="orbia-chip">✦ Indicadores operacionais</span>
+    <span class="orbia-chip">↗ Análise inteligente</span>
+    <span class="orbia-chip">▤ Relatórios em PDF</span>
+  </div>
+</div>
+""", unsafe_allow_html=True)
 
-st.divider()
+feature1, feature2, feature3 = st.columns(3)
+with feature1:
+    st.markdown("""
+    <div class="orbia-info-card">
+      <div class="orbia-info-icon">◈</div>
+      <div class="orbia-info-title">Visão operacional</div>
+      <div class="orbia-info-copy">Acompanhe volumes, atrasos e prioridades em uma visão organizada.</div>
+    </div>
+    """, unsafe_allow_html=True)
+with feature2:
+    st.markdown("""
+    <div class="orbia-info-card">
+      <div class="orbia-info-icon">✧</div>
+      <div class="orbia-info-title">Inteligência aplicada</div>
+      <div class="orbia-info-copy">Transforme indicadores em diagnósticos e recomendações objetivas.</div>
+    </div>
+    """, unsafe_allow_html=True)
+with feature3:
+    st.markdown("""
+    <div class="orbia-info-card">
+      <div class="orbia-info-icon">▤</div>
+      <div class="orbia-info-title">Relatório estruturado</div>
+      <div class="orbia-info-copy">Gere um documento para consultar e compartilhar os resultados.</div>
+    </div>
+    """, unsafe_allow_html=True)
+
+st.markdown("<div style='height:1.2rem'></div>", unsafe_allow_html=True)
 
 
 # ==========================================
@@ -417,7 +615,11 @@ def gerar_pdf(indicadores, analise):
 # ENVIO DA PLANILHA
 # ==========================================
 
-st.header("📊 Análise operacional")
+st.markdown("""
+<div class="orbia-eyebrow">Comece por aqui</div>
+<div class="orbia-section-title">Análise operacional</div>
+<div class="orbia-section-copy">Envie sua planilha para transformar os registros em indicadores e insights.</div>
+""", unsafe_allow_html=True)
 
 arquivo = st.file_uploader(
     "Selecione sua planilha de pedidos",
@@ -502,7 +704,11 @@ if "indicadores" in st.session_state:
 
     st.divider()
 
-    st.header("📈 Indicadores operacionais")
+    st.markdown("""
+<div class="orbia-eyebrow">Visão geral</div>
+<div class="orbia-section-title">Indicadores operacionais</div>
+<div class="orbia-section-copy">Principais medidas calculadas a partir da planilha enviada.</div>
+""", unsafe_allow_html=True)
 
     col1, col2, col3, col4 = st.columns(4)
 
@@ -529,13 +735,21 @@ if "indicadores" in st.session_state:
 
     st.divider()
 
-    st.header("🤖 Análise inteligente da ORBIA")
+    st.markdown("""
+<div class="orbia-eyebrow">Leitura inteligente</div>
+<div class="orbia-section-title">Análise inteligente da ORBIA</div>
+<div class="orbia-section-copy">Diagnóstico, riscos observáveis e ações prioritárias sugeridas.</div>
+""", unsafe_allow_html=True)
 
     st.markdown(st.session_state["analise"])
 
     st.divider()
 
-    st.header("📄 Relatório operacional")
+    st.markdown("""
+<div class="orbia-eyebrow">Exportação</div>
+<div class="orbia-section-title">Relatório operacional</div>
+<div class="orbia-section-copy">Leve os principais resultados em um documento PDF.</div>
+""", unsafe_allow_html=True)
 
     st.download_button(
         label="⬇️ Baixar relatório em PDF",
