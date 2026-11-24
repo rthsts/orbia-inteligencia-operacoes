@@ -148,16 +148,35 @@ p, label, li, .stMarkdown { color: #DCEAF5; }
 .orbia-info-title { color: #F1F8FC; font-weight: 700; margin-bottom: .25rem; }
 .orbia-info-copy { color: #B9CAD8; font-size: .82rem; line-height: 1.5; }
 
-/* Área de upload */
+/* Área de upload — fundo claro e texto azul-escuro */
 [data-testid="stFileUploader"] section {
-    background: rgba(12,34,55,.72) !important;
-    border: 1px dashed rgba(83,202,237,.55) !important;
+    background: #EAF7FC !important;
+    border: 1px dashed #63BBD5 !important;
     border-radius: 17px !important;
 }
-[data-testid="stFileUploader"] section * { color: #E7F5FC !important; }
+[data-testid="stFileUploader"] section *,
+[data-testid="stFileUploader"] small,
+[data-testid="stFileUploader"] label,
+[data-testid="stFileUploader"] span,
+[data-testid="stFileUploader"] p {
+    color: #08263D !important;
+}
 [data-testid="stFileUploader"] button {
-    background: #DDF6FF !important; color: #08263D !important;
-    border: 1px solid #8ADCF2 !important; font-weight: 700 !important;
+    background: #DDF6FF !important;
+    color: #08263D !important;
+    border: 1px solid #63BBD5 !important;
+    font-weight: 800 !important;
+}
+[data-testid="stFileUploader"] button * {
+    color: #08263D !important;
+    fill: #08263D !important;
+}
+[data-testid="stFileUploader"] [data-testid="stFileUploaderFile"] {
+    background: #DDF6FF !important;
+}
+[data-testid="stFileUploader"] [data-testid="stFileUploaderFile"] * {
+    color: #08263D !important;
+    fill: #08263D !important;
 }
 
 /* Cartões dos indicadores */
@@ -206,15 +225,22 @@ div[data-testid="stMetric"] {
 }
 .stButton > button p { color: inherit !important; }
 
-/* Alertas de sucesso */
+/* Mensagens de sucesso e erro */
 [data-testid="stAlert"][data-alert-type="success"] {
-    background: #DDF6FF !important; border: 1px solid #36C5F0 !important;
-    border-radius: 12px !important; color: #08263D !important;
+    background: #DDF6FF !important;
+    border: 1px solid #36C5F0 !important;
+    border-radius: 12px !important;
 }
-[data-testid="stAlert"][data-alert-type="success"] p,
-[data-testid="stAlert"][data-alert-type="success"] div,
-[data-testid="stAlert"][data-alert-type="success"] span {
-    color: #08263D !important; font-weight: 700 !important;
+[data-testid="stAlert"][data-alert-type="error"] {
+    background: #FDECEF !important;
+    border: 1px solid #E6A3B0 !important;
+    border-radius: 12px !important;
+}
+[data-testid="stAlert"][data-alert-type="success"] *,
+[data-testid="stAlert"][data-alert-type="error"] * {
+    color: #08263D !important;
+    fill: #08263D !important;
+    font-weight: 700 !important;
 }
 
 /* Download PDF */
@@ -633,7 +659,21 @@ arquivo = st.file_uploader(
 
 if arquivo:
 
-    st.success(f"Arquivo recebido: {arquivo.name}")
+    st.markdown(
+        f"""
+        <div style="
+            background-color: #DDF6FF;
+            color: #08263D;
+            border: 1px solid #36C5F0;
+            padding: 14px;
+            border-radius: 12px;
+            font-weight: 700;
+        ">
+            Arquivo recebido: {escape(arquivo.name)}
+        </div>
+        """,
+        unsafe_allow_html=True
+    )
 
     if st.button("✨ Iniciar análise"):
 
@@ -681,7 +721,21 @@ if arquivo:
                 st.session_state["analise"] = analise
                 st.session_state["pdf"] = pdf
 
-                st.success("Análise concluída com sucesso!")
+                st.markdown(
+                    """
+                    <div style="
+                        background-color: #DDF6FF;
+                        color: #08263D;
+                        border: 1px solid #36C5F0;
+                        padding: 14px;
+                        border-radius: 12px;
+                        font-weight: 700;
+                    ">
+                        Análise concluída com sucesso!
+                    </div>
+                    """,
+                    unsafe_allow_html=True
+                )
 
             except Exception as erro:
 
