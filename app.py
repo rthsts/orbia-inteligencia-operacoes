@@ -409,57 +409,56 @@ REGRAS:
 - Escreva em português brasileiro, com clareza e objetividade.
 """
 
-    # Faz até três tentativas quando o serviço está temporariamente indisponível.
-    # Os intervalos evitam repetir a chamada imediatamente.
-    intervalos_espera = [3, 8]
+    # Modelo principal e alternativas oficiais para reduzir a dependência
+    # de um único modelo quando houver indisponibilidade temporária.
+    modelos = [
+        "gemini-3.8-flash",
+        "gemini-3.6-flash",
+        "gemini-3.5-flash-lite"
+    ]
+
     ultimo_erro = None
+    erros_temporarios = (
+        "500", "502", "503", "504",
+        "UNAVAILABLE", "RESOURCE_EXHAUSTED", "INTERNAL"
+    )
 
-    for tentativa in range(3):
-
-        try:
-            resposta = cliente_ia.models.generate_content(
-                model="gemini-3.8-flash",
-                contents=prompt
-            )
-
-            if not resposta.text:
-                raise ValueError(
-                    "O Gemini não retornou uma análise."
+    for modelo in modelos:
+        for tentativa in range(2):
+            try:
+                resposta = cliente_ia.models.generate_content(
+                    model=modelo,
+                    contents=prompt
                 )
 
-            return resposta.text
+                if not resposta.text:
+                    raise ValueError("O Gemini não retornou uma análise.")
 
-        except Exception as erro:
+                return resposta.text
 
-            ultimo_erro = erro
-            mensagem_erro = str(erro).upper()
+            except Exception as erro:
+                ultimo_erro = erro
+                mensagem_erro = str(erro).upper()
 
-            erro_temporario = any(
-                codigo in mensagem_erro
-                for codigo in (
-                    "429",
-                    "500",
-                    "502",
-                    "503",
-                    "504",
-                    "UNAVAILABLE",
-                    "RESOURCE_EXHAUSTED",
-                    "INTERNAL"
+                # Erros de configuração, autenticação ou requisição não devem
+                # ser mascarados por tentativas em outros modelos.
+                erro_temporario = any(
+                    codigo in mensagem_erro for codigo in erros_temporarios
                 )
-            )
 
-            # Erros que não parecem temporários não são repetidos.
-            if not erro_temporario:
-                raise
+                if not erro_temporario:
+                    raise
 
-            # Se ainda houver tentativas, aguarda antes de tentar novamente.
-            if tentativa < 2:
-                time.sleep(intervalos_espera[tentativa])
+                # Uma espera curta antes da segunda tentativa no mesmo modelo.
+                if tentativa == 0:
+                    time.sleep(3)
+
+        # Se o modelo principal continuar indisponível, tenta o próximo.
 
     raise RuntimeError(
-        "O serviço do Gemini permaneceu indisponível após três tentativas. "
-        "A planilha foi recebida, mas a análise por IA não pôde ser concluída. "
-        "Tente novamente mais tarde. "
+        "A análise por IA não pôde ser concluída porque os modelos do Gemini "
+        "tentados estão temporariamente indisponíveis. A planilha foi recebida "
+        "e os indicadores locais foram processados. Tente novamente mais tarde. "
         f"Detalhe técnico: {ultimo_erro}"
     )
 
