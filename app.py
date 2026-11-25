@@ -179,12 +179,14 @@ p, label, li, .stMarkdown { color: #DCEAF5; }
     fill: #08263D !important;
 }
 
-/* Cartões dos indicadores */
+/* Cartões dos indicadores — dimensões e conteúdo alinhados */
 div[data-testid="stMetric"] {
     background: linear-gradient(145deg, rgba(20,48,74,.96), rgba(10,29,48,.96));
     border: 1px solid rgba(116,195,224,.22);
     border-radius: 17px;
     padding: 1rem 1.1rem;
+    min-height: 112px;
+    box-sizing: border-box;
     box-shadow: 0 10px 28px rgba(0,0,0,.14);
 }
 [data-testid="stMetricLabel"] p {
@@ -192,17 +194,26 @@ div[data-testid="stMetric"] {
 }
 [data-testid="stMetricValue"] {
     color: #55D5F5 !important; font-family: 'Manrope', sans-serif !important;
+    font-size: clamp(1.25rem, 1.65vw, 1.65rem) !important;
     font-weight: 800 !important;
+    letter-spacing: -.045em !important;
+    white-space: nowrap !important;
+}
+[data-testid="stMetricValue"] div {
+    white-space: nowrap !important;
 }
 [data-testid="stMetricDelta"] {
     background: #DDF6FF !important;
     color: #08263D !important;
     border: 1px solid #8ADCF2 !important;
     border-radius: 999px !important;
-    padding: .22rem .55rem !important;
+    padding: .10rem .38rem !important;
     display: inline-flex !important;
     align-items: center !important;
     width: fit-content !important;
+    max-width: max-content !important;
+    font-size: .72rem !important;
+    line-height: 1.1 !important;
     font-weight: 800 !important;
 }
 [data-testid="stMetricDelta"] p,
@@ -210,6 +221,7 @@ div[data-testid="stMetric"] {
 [data-testid="stMetricDelta"] svg {
     color: #08263D !important;
     fill: #08263D !important;
+    font-size: .72rem !important;
 }
 
 /* Botões */
