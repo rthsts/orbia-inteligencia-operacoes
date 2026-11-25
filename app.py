@@ -3,6 +3,7 @@ import re
 import time
 from io import BytesIO
 from datetime import datetime
+from zoneinfo import ZoneInfo
 from xml.sax.saxutils import escape
 
 import streamlit as st
@@ -562,7 +563,7 @@ def gerar_pdf(indicadores, analise):
 
     conteudo.append(
         Paragraph(
-            f"Data de geração: {datetime.now().strftime('%d/%m/%Y %H:%M')}",
+            f"Data de geração: {datetime.now(ZoneInfo('America/Sao_Paulo')).strftime('%d/%m/%Y %H:%M')}",
             estilos["TextoOrbia"]
         )
     )
